@@ -107,10 +107,12 @@
     }
   },
   {
-    "experiment_name": "quarkus-resteasy-autotune-max-throughput",
+    "experiment_name": "pet-resteasy-autotune-max-throughput",
+    "mode": "Apply/MetricCollectionOnly",
+    "environment": "QA/PROD",
     "resource": {
       "namespace": "default",
-      "deployment_name": "tfb-qrh-sample2"
+      "deployment_name": "petclinic-sample"
     },
     "datasource_info": {
       "prometheus1": {
@@ -150,30 +152,32 @@
       }
     },
     "container_metrics": {
-      "memoryRequest": {
-        "name": "memoryRequest",
-        "query": "container_memory_working_set_bytes{$CONTAINER_LABEL$=\"\", $POD_LABEL$=\"$POD$\"}",
-        "datasource": "prometheus",
-        "valueType": "double"
-      },
-      "gc": {
-        "name": "gc",
-        "query": "jvm_memory_used_bytes{area=\"heap\", $CONTAINER_LABEL$=\"\", $POD_LABEL$=\"$POD$\"}",
-        "datasource": "prometheus",
-        "valueType": "categorical"
-      },
-      "cpuRequest": {
-        "name": "cpuRequest",
-        "query": "(container_cpu_usage_seconds_total{$CONTAINER_LABEL$!=\"POD\", $POD_LABEL$=\"$POD$\"}[1m])",
-        "datasource": "prometheus",
-        "valueType": "double"
+      "container_name": {
+        "memoryRequest": {
+          "name": "memoryRequest",
+          "query": "container_memory_working_set_bytes{$CONTAINER_LABEL$=\"\", $POD_LABEL$=\"$POD$\"}",
+          "datasource": "prometheus",
+          "valueType": "double"
+        },
+        "gc": {
+          "name": "gc",
+          "query": "jvm_memory_used_bytes{area=\"heap\", $CONTAINER_LABEL$=\"\", $POD_LABEL$=\"$POD$\"}",
+          "datasource": "prometheus",
+          "valueType": "categorical"
+        },
+        "cpuRequest": {
+          "name": "cpuRequest",
+          "query": "(container_cpu_usage_seconds_total{$CONTAINER_LABEL$!=\"POD\", $POD_LABEL$=\"$POD$\"}[1m])",
+          "datasource": "prometheus",
+          "valueType": "double"
+        }
       }
     },
     "trials": {
       "0": {
         "config": {
-          "image": "kruize/tfb-qrh:2.9.0.F_mm",
-          "container_name": "tfb-server",
+          "image": "kruize/spring_petclinic:2.2.0-jdk-11.0.8-openj9-0.21.0",
+          "container_name": "petclinic-tomcat",
           "requests": {
             "cpu": {
               "amount": "2.11",
